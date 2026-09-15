@@ -12,8 +12,6 @@ Dieses Repository enthält die Eingabedateien, Ergebnisse und Auswertungen der i
 beschriebenen Simulationen. Es dient dem Nachvollzug der in den Kapiteln 4 bis 6 berichteten
 Zahlen; es ist kein lauffähiges Softwarepaket.
 
-Umfang: 200 Dateien in vier Verzeichnissen.
-
 ---
 
 ## 1 Verzeichnisstruktur
