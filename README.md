@@ -46,7 +46,7 @@ Isotherme Verifikation der vier Lüftungsmodelle gegen die Handrechnung. Kapitel
 
 | Ordner | Dateien | Inhalt |
 |---|---|---|
-| `Berechnungen_isotherme_Simulation.xlsx` | 1 | Handrechnung und Gegenüberstellung Simulation/Handrechnung, blattweise nach den Abschnitten von Kapitel 5 gegliedert. |
+| `Auswertung_isotherme_Simulation.xlsx` | 1 | Handrechnung und Gegenüberstellung Simulation/Handrechnung, blattweise nach den Abschnitten von Kapitel 5 gegliedert. |
 | `01_Generator` | 2 | `make_isotherm_varianten.py` erzeugt die 30 IDF aus einer gemeinsamen Vorlage; `run_alle.bat` startet die Läufe. |
 | `02_IDF` | 30 | EnergyPlus-Eingabedateien: je sechs Varianten für die vier Modellansätze `ZoneVentilation:DesignFlowRate` in den Koeffizientensätzen DEFAULT, BLAST und DOE-2, für `ZoneVentilation:WindandStackOpenArea` (WSOA) und für das `AirflowNetwork` (AFN). |
 | `03_Wetterdaten` | 2 | Zwei konstruierte isotherme Wetterdateien für die Anströmrichtungen 157,5° und 247,5°. |
