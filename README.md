@@ -73,7 +73,6 @@ Isotherme Verifikation der vier Lüftungsmodelle gegen die Handrechnung. Kapitel
 |---|---|
 | Gebäudesimulation | EnergyPlus 25.2.0-cf7368216c |
 | CFD, Rechnungen | OpenFOAM (ESI), Angabe im Berichtsblatt: v2412, Solver `buoyantBoussinesqSimpleFoam`, k–ω-SST |
-| CFD, Netzprüfung | OpenFOAM v1912, Build 200626 (Kopfzeile der `checkMesh`-Protokolle) |
 | Auswertung | Python 3, Microsoft Excel |
 
 ---
