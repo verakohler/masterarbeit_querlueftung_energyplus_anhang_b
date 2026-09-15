@@ -1,0 +1,36 @@
+Program Version,EnergyPlus, Version 25.2.0-cf7368216c, YMD=2026.07.28 10:22,
+   ************* Testing Individual Branch Integrity
+   ************* All Branches passed integrity testing
+   ************* Testing Individual Supply Air Path Integrity
+   ************* All Supply Air Paths passed integrity testing
+   ************* Testing Individual Return Air Path Integrity
+   ************* All Return Air Paths passed integrity testing
+   ************* No node connection errors were found.
+   ************* Beginning Simulation
+   ************* Simulation Error Summary *************
+   ** Warning ** The following schedule names are "Unused Schedules".  These schedules are in the idf
+   **   ~~~   **  file but are never obtained by the simulation and therefore are NOT used.
+   ************* Schedule:Year or Schedule:Compact or Schedule:File or Schedule:Constant=TOR_ZU
+   *************
+   ************* ===== Recurring Surface Error Summary =====
+   ************* The following surface error messages occurred.
+   *************
+   ************* Base Surface does not surround subsurface errors occurring...
+   ************* Check that the GlobalGeometryRules object is expressing the proper starting corner and direction [CounterClockwise/Clockwise]
+   *************
+   ** Warning ** Base surface does not surround subsurface (CHKSBS), Overlap Status=No-Overlap
+   **   ~~~   **   The base surround errors occurred 3 times.
+   **   ~~~   ** Surface "AW_NORD" misses SubSurface "GATE 4"
+   **   ~~~   ** Surface "AW_NORD" misses SubSurface "GATE 5"
+   **   ~~~   ** Surface "AW_NORD" misses SubSurface "GATE 6"
+   ** Warning ** Base surface does not surround subsurface (CHKSBS), Overlap Status=No-Overlap
+   **   ~~~   **   The base surround errors occurred 3 times.
+   **   ~~~   ** Surface "AW_SUED" misses SubSurface "GATE 1"
+   **   ~~~   ** Surface "AW_SUED" misses SubSurface "GATE 2"
+   **   ~~~   ** Surface "AW_SUED" misses SubSurface "GATE 3"
+   *************
+   **   ~~~   **   The base surround errors occurred 6 times (total).
+   *************
+   ************* EnergyPlus Warmup Error Summary. During Warmup: 0 Warning; 0 Severe Errors.
+   ************* EnergyPlus Sizing Error Summary. During Sizing: 0 Warning; 0 Severe Errors.
+   ************* EnergyPlus Completed Successfully-- 7 Warning; 0 Severe Errors; Elapsed Time=00hr 00min  0.15sec

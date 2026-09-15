@@ -1,0 +1,813 @@
+! ==============================================================================
+! DFR_DEFAULT_1.idf
+! ==============================================================================
+! Modellansatz      : ZoneVentilation:DesignFlowRate, Programmvoreinstellung von EnergyPlus
+! Variante          : 1 - Tore 2 + 5 gegenueberliegend, keine Barriere, schraege Anstroemung
+! Offene Tore       : Tor 2, Tor 5
+! Innere Barriere   : nein
+! Wetterdatei       : DEU_Munich.108660_Isotherm-WSW2475-u5072.epw
+! Windrichtung      : 247.5 Grad (meteorologisch)
+! Windgeschwindigk. : 5.071965 m/s in jeder Hoehe (flaches Profil, Exponent 0)
+!                     = 6.5 * (1.7/10)^0.14, Blatt Wetter
+! Randbedingung     : isotherm, T_aussen = T_zone = 17 Grad C
+! EnergyPlus        : 25.2
+!
+! Werte aus Handrechnungen_neu.xlsx. Erzeugt von make_isotherm_varianten.py.
+! Keine Undichtheiten (kein AFN_Crack, kein ZoneInfiltration) und keine
+! internen Lasten: die Datei prueft ausschliesslich den Toranteil gegen die
+! Handrechnung.
+!
+! Sollwerte fuer die Verifikation (Blatt DesignFlowRate):
+!   A_eff (Reihenschaltung)  = 6.36396 m2
+!   Anstroemwinkel theta     = 67.5 Grad, cos theta = 0.38268
+!   k = C_D * A_eff * cos    = 1.50994 m2
+!   Normierungsgeschw. u_ref = 5.07196 m/s
+!   Design Flow Rate         = k * u_ref = 7.65835 m3/s
+!   Koeffizientenpolynom     = 1 bei u = 5.07196 m/s und dT = 0
+!   Q_vent                   = 7.6583 m3/s
+!   Luftwechsel (V = 10800 m3) = 2.5528 1/h
+!   Referenz Q_soll = k * u   = 7.6583 m3/s  ->  Abweichung 0 Prozent
+! 
+! ZoneVentilation:DesignFlowRate enthaelt keinen Windrichtungsterm. Der
+! Unterschied zwischen den Varianten 1-3 und 4-6 steckt ausschliesslich im
+! handgerechneten Design Flow Rate ueber cos theta, nicht in einer Rechnung
+! von EnergyPlus. Die Wetterdatei liefert hier nur die Windgeschwindigkeit.
+! ==============================================================================
+
+
+!- ============================================================================
+!-   VERSION, SIMULATIONCONTROL, BUILDING, TIMESTEP
+!- ============================================================================
+
+Version,
+    25.2;                    !- Version Identifier
+
+SimulationControl,
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    No,                      !- Run Simulation for Sizing Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
+    ,                        !- Do HVAC Sizing Simulation for Sizing Periods
+    ;                        !- Maximum Number of HVAC Sizing Simulation Passes
+
+!- North Axis 0: Gebaeude fest orientiert. Die Anstroemrichtung wird ueber
+!- die Wetterdatei gedreht, nicht ueber das Gebaeude - so bleiben Effective
+!- Angle und AFN-Azimut unveraendert und die Handrechnung vergleichbar.
+Building,
+    Halle_15x60x12,          !- Name
+    0,                       !- North Axis {deg}
+    Country,                 !- Terrain
+    ,                        !- Loads Convergence Tolerance Value {W}
+    ,                        !- Temperature Convergence Tolerance Value {deltaC}
+    ,                        !- Solar Distribution
+    ,                        !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+Timestep,
+    4;                       !- Number of Timesteps per Hour
+
+
+!- ============================================================================
+!-   SITE
+!- ============================================================================
+
+Site:Location,
+    Muenchen_Bayern_DEU,     !- Name
+    48.13,                   !- Latitude {deg}
+    11.70,                   !- Longitude {deg}
+    1,                       !- Time Zone {hr}
+    529;                     !- Elevation {m}
+
+!- Flaches Windprofil in beiden Objekten und Temperaturgradient 0.
+!- Nachgewiesen in Notiz_Windprofil_Verifikation_Sollwerte.md, Lauf B2:
+!- alle Zonen und alle External Nodes sehen u = u_EPW, Delta-T exakt 0.
+!- Site:WeatherStation ist bei Exponent 0 nicht zwingend (Lauf B1), wird
+!- aber gesetzt, damit das flache Profil explizit im Eingabefile steht.
+Site:WeatherStation,
+    10.0,                    !- Wind Sensor Height Above Ground {m}
+    0.0,                     !- Wind Speed Profile Exponent
+    270,                     !- Wind Speed Profile Boundary Layer Thickness {m}
+    1.5;                     !- Air Temperature Sensor Height Above Ground {m}
+
+Site:HeightVariation,
+    0.0,                     !- Wind Speed Profile Exponent
+    270,                     !- Wind Speed Profile Boundary Layer Thickness {m}
+    0.0;                     !- Air Temperature Gradient Coefficient {K/m}
+
+!- Erdreichtemperatur = Zonentemperatur, damit der Boden keinen
+!- Waermestrom erzeugt und die Zone ohne Anlagenleistung isotherm bleibt.
+Site:GroundTemperature:BuildingSurface,
+    17,                      !- January Ground Temperature {C}
+    17,                      !- February Ground Temperature {C}
+    17,                      !- March Ground Temperature {C}
+    17,                      !- April Ground Temperature {C}
+    17,                      !- May Ground Temperature {C}
+    17,                      !- June Ground Temperature {C}
+    17,                      !- July Ground Temperature {C}
+    17,                      !- August Ground Temperature {C}
+    17,                      !- September Ground Temperature {C}
+    17,                      !- October Ground Temperature {C}
+    17,                      !- November Ground Temperature {C}
+    17;                      !- December Ground Temperature {C}
+
+
+!- ============================================================================
+!-   RUNPERIOD
+!- ============================================================================
+
+!- Die Wetterdatei enthaelt genau einen Tag (15.01.) mit 24 identischen
+!- Stundenwerten. Auswertung an einem beliebigen Zeitschritt nach Warmup.
+RunPeriod,
+    Isotherm_15Jan,          !- Name
+    1,                       !- Begin Month
+    15,                      !- Begin Day of Month
+    ,                        !- Begin Year
+    1,                       !- End Month
+    15,                      !- End Day of Month
+    ,                        !- End Year
+    Wednesday,               !- Day of Week for Start Day
+    No,                      !- Use Weather File Holidays and Special Days
+    No,                      !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    No,                      !- Use Weather File Rain Indicators
+    No;                      !- Use Weather File Snow Indicators
+
+
+!- ============================================================================
+!-   SCHEDULES
+!- ============================================================================
+
+ScheduleTypeLimits,
+    Fractional,              !- Name
+    0,                       !- Lower Limit Value
+    1,                       !- Upper Limit Value
+    Continuous;              !- Numeric Type
+
+ScheduleTypeLimits,
+    Temperature,             !- Name
+    -60,                     !- Lower Limit Value
+    200,                     !- Upper Limit Value
+    Continuous,              !- Numeric Type
+    Temperature;             !- Unit Type
+
+ScheduleTypeLimits,
+    Control Type,            !- Name
+    0,                       !- Lower Limit Value
+    4,                       !- Upper Limit Value
+    Discrete,                !- Numeric Type
+    Control;                 !- Unit Type
+
+Schedule:Constant,
+    Sch_Tor_auf,             !- Name
+    Fractional,              !- Schedule Type Limits Name
+    1.0;                     !- Hourly Value
+
+Schedule:Constant,
+    Sch_Tor_zu,              !- Name
+    Fractional,              !- Schedule Type Limits Name
+    0.0;                     !- Hourly Value
+
+!- Ein einziger Sollwert von 17 Grad C, Regelungsart 3
+!- (SingleHeatingOrCooling): die Zone wird sowohl geheizt als auch gekuehlt
+!- und haelt damit exakt die Aussentemperatur. Nur so ist Delta-T = 0 und der
+!- Auftriebsterm sicher inaktiv.
+Schedule:Constant,
+    Sch_T_iso,               !- Name
+    Temperature,             !- Schedule Type Limits Name
+    17;                      !- Hourly Value
+
+Schedule:Constant,
+    Sch_Regelungsart,        !- Name
+    Control Type,            !- Schedule Type Limits Name
+    3;                       !- Hourly Value
+
+
+!- ============================================================================
+!-   MATERIALS AND CONSTRUCTIONS
+!- ============================================================================
+
+!- Uebernommen aus AFN_paper_Vorlage.idf. Im isothermen Fall ohne Wirkung
+!- (Delta-T = 0, keine Solarstrahlung in der Wetterdatei), aber erhalten,
+!- damit dieselbe Huelle im Heizperiodenlauf verwendet werden kann.
+Material,
+    AW_IW_Obj30_Porenbeton,  !- Name
+    MediumRough,             !- Roughness
+    0.2032,                  !- Thickness {m}
+    0.5,                     !- Conductivity {W/m-K}
+    464,                     !- Density {kg/m3}
+    880;                     !- Specific Heat {J/kg-K}
+
+Material,
+    D_Obj14_Gipskarton,      !- Name
+    MediumSmooth,            !- Roughness
+    0.0159,                  !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    800,                     !- Density {kg/m3}
+    1090;                    !- Specific Heat {J/kg-K}
+
+Material,
+    B_Obj43_Beton,           !- Name
+    MediumRough,             !- Roughness
+    0.2032,                  !- Thickness {m}
+    1.95,                    !- Conductivity {W/m-K}
+    2240,                    !- Density {kg/m3}
+    900;                     !- Specific Heat {J/kg-K}
+
+Material,
+    AW_Obj91_Waermedaemmung, !- Name
+    Rough,                   !- Roughness
+    0.025,                   !- Thickness {m}
+    0.0245,                  !- Conductivity {W/m-K}
+    24,                      !- Density {kg/m3}
+    1590;                    !- Specific Heat {J/kg-K}
+
+Material,
+    D_Obj80_Daemmung,        !- Name
+    MediumRough,             !- Roughness
+    0.05,                    !- Thickness {m}
+    0.036,                   !- Conductivity {W/m-K}
+    140,                     !- Density {kg/m3}
+    960;                     !- Specific Heat {J/kg-K}
+
+Material,
+    D_Obj84_XPS,             !- Name
+    MediumSmooth,            !- Roughness
+    0.025,                   !- Thickness {m}
+    0.029,                   !- Conductivity {W/m-K}
+    29,                      !- Density {kg/m3}
+    1210;                    !- Specific Heat {J/kg-K}
+
+Material,
+    D_Obj8_Built-up roofing, !- Name
+    Rough,                   !- Roughness
+    0.0095,                  !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    1120,                    !- Density {kg/m3}
+    1460;                    !- Specific Heat {J/kg-K}
+
+WindowMaterial:SimpleGlazingSystem,
+    Glazing_Tor,             !- Name
+    1.8,                     !- U-Factor {W/m2-K}
+    0.0001;                  !- Solar Heat Gain Coefficient
+
+Construction,
+    Aussenwand,              !- Name
+    AW_Obj91_Waermedaemmung, !- Outside Layer
+    AW_IW_Obj30_Porenbeton;  !- Layer 2
+
+Construction,
+    Innenwand,               !- Name
+    AW_IW_Obj30_Porenbeton;  !- Outside Layer
+
+Construction,
+    Dach,                    !- Name
+    D_Obj8_Built-up roofing, !- Outside Layer
+    D_Obj80_Daemmung,        !- Layer 2
+    D_Obj14_Gipskarton;      !- Layer 3
+
+Construction,
+    Boden,                   !- Name
+    D_Obj84_XPS,             !- Outside Layer
+    B_Obj43_Beton;           !- Layer 2
+
+Construction,
+    Tor,                     !- Name
+    Glazing_Tor;             !- Outside Layer
+
+
+!- ============================================================================
+!-   GLOBALGEOMETRYRULES
+!- ============================================================================
+
+GlobalGeometryRules,
+    UpperLeftCorner,         !- Starting Vertex Position
+    Counterclockwise,        !- Vertex Entry Direction
+    Relative,                !- Coordinate System
+    Relative,                !- Daylighting Reference Point Coordinate System
+    Relative;                !- Rectangular Surface Coordinate System
+
+
+!- ============================================================================
+!-   ZONES
+!- ============================================================================
+
+Zone,
+    Zone_Halle,              !- Name
+    0,                       !- Direction of Relative North {deg}
+    0,                       !- X Origin {m}
+    0,                       !- Y Origin {m}
+    0,                       !- Z Origin {m}
+    ,                        !- Type
+    1,                       !- Multiplier
+    12,                      !- Ceiling Height {m}
+    10800,                   !- Volume {m3}
+    900,                     !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+
+!- ============================================================================
+!-   BUILDINGSURFACE:DETAILED
+!- ============================================================================
+
+BuildingSurface:Detailed,
+    Boden,                   !- Name
+    Floor,                   !- Surface Type
+    Boden,                   !- Construction Name
+    Zone_Halle,              !- Zone Name
+    ,                        !- Space Name
+    Ground,                  !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    1,                       !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0,                       !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    0,                       !- Vertex 1 Z-coordinate {m}
+    0,                       !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    0,                       !- Vertex 2 Z-coordinate {m}
+    15,                      !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    15,                      !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+BuildingSurface:Detailed,
+    Dach,                    !- Name
+    Roof,                    !- Surface Type
+    Dach,                    !- Construction Name
+    Zone_Halle,              !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0,                       !- View Factor to Ground
+    4,                       !- Number of Vertices
+    15,                      !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    12,                      !- Vertex 1 Z-coordinate {m}
+    15,                      !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    12,                      !- Vertex 2 Z-coordinate {m}
+    0,                       !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    12,                      !- Vertex 3 Z-coordinate {m}
+    0,                       !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    12;                      !- Vertex 4 Z-coordinate {m}
+
+BuildingSurface:Detailed,
+    IW_West,                 !- Name
+    Wall,                    !- Surface Type
+    Innenwand,               !- Construction Name
+    Zone_Halle,              !- Zone Name
+    ,                        !- Space Name
+    Adiabatic,               !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    0,                       !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0,                       !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    12,                      !- Vertex 1 Z-coordinate {m}
+    0,                       !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    12,                      !- Vertex 2 Z-coordinate {m}
+    0,                       !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    0,                       !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+BuildingSurface:Detailed,
+    IW_Ost,                  !- Name
+    Wall,                    !- Surface Type
+    Innenwand,               !- Construction Name
+    Zone_Halle,              !- Zone Name
+    ,                        !- Space Name
+    Adiabatic,               !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    0,                       !- View Factor to Ground
+    4,                       !- Number of Vertices
+    15,                      !- Vertex 1 X-coordinate {m}
+    60,                      !- Vertex 1 Y-coordinate {m}
+    12,                      !- Vertex 1 Z-coordinate {m}
+    15,                      !- Vertex 2 X-coordinate {m}
+    0,                       !- Vertex 2 Y-coordinate {m}
+    12,                      !- Vertex 2 Z-coordinate {m}
+    15,                      !- Vertex 3 X-coordinate {m}
+    0,                       !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    15,                      !- Vertex 4 X-coordinate {m}
+    60,                      !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+BuildingSurface:Detailed,
+    AW_Sued,                 !- Name
+    Wall,                    !- Surface Type
+    Aussenwand,              !- Construction Name
+    Zone_Halle,              !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0.5,                     !- View Factor to Ground
+    4,                       !- Number of Vertices
+    15,                      !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    12,                      !- Vertex 1 Z-coordinate {m}
+    0,                       !- Vertex 2 X-coordinate {m}
+    0,                       !- Vertex 2 Y-coordinate {m}
+    12,                      !- Vertex 2 Z-coordinate {m}
+    0,                       !- Vertex 3 X-coordinate {m}
+    0,                       !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    15,                      !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+BuildingSurface:Detailed,
+    AW_Nord,                 !- Name
+    Wall,                    !- Surface Type
+    Aussenwand,              !- Construction Name
+    Zone_Halle,              !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0.5,                     !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0,                       !- Vertex 1 X-coordinate {m}
+    60,                      !- Vertex 1 Y-coordinate {m}
+    12,                      !- Vertex 1 Z-coordinate {m}
+    15,                      !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    12,                      !- Vertex 2 Z-coordinate {m}
+    15,                      !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    0,                       !- Vertex 4 X-coordinate {m}
+    60,                      !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+
+!- ============================================================================
+!-   FENESTRATIONSURFACE:DETAILED  (TORE)
+!- ============================================================================
+
+!- Alle sechs Tore sind in jeder Variante geometrisch vorhanden, damit die
+!- Huelle ueber alle Varianten identisch ist. Geoeffnet ist nur, was ein
+!- Lueftungsobjekt bzw. eine AirflowNetwork:MultiZone:Surface erhaelt.
+!- Tor 1, AW_Sued, x = 1 bis 4 m, z = 0 bis 3 m, A = 9 m2 (geschlossen)
+FenestrationSurface:Detailed,
+    gate 1,                  !- Name
+    Window,                  !- Surface Type
+    Tor,                     !- Construction Name
+    AW_Sued,                 !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    4,                       !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    3,                       !- Vertex 1 Z-coordinate {m}
+    1,                       !- Vertex 2 X-coordinate {m}
+    0,                       !- Vertex 2 Y-coordinate {m}
+    3,                       !- Vertex 2 Z-coordinate {m}
+    1,                       !- Vertex 3 X-coordinate {m}
+    0,                       !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    4,                       !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+!- Tor 2, AW_Sued, x = 6 bis 9 m, z = 0 bis 3 m, A = 9 m2 (offen in dieser Variante)
+FenestrationSurface:Detailed,
+    gate 2,                  !- Name
+    Window,                  !- Surface Type
+    Tor,                     !- Construction Name
+    AW_Sued,                 !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    9,                       !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    3,                       !- Vertex 1 Z-coordinate {m}
+    6,                       !- Vertex 2 X-coordinate {m}
+    0,                       !- Vertex 2 Y-coordinate {m}
+    3,                       !- Vertex 2 Z-coordinate {m}
+    6,                       !- Vertex 3 X-coordinate {m}
+    0,                       !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    9,                       !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+!- Tor 3, AW_Sued, x = 11 bis 14 m, z = 0 bis 3 m, A = 9 m2 (geschlossen)
+FenestrationSurface:Detailed,
+    gate 3,                  !- Name
+    Window,                  !- Surface Type
+    Tor,                     !- Construction Name
+    AW_Sued,                 !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    14,                      !- Vertex 1 X-coordinate {m}
+    0,                       !- Vertex 1 Y-coordinate {m}
+    3,                       !- Vertex 1 Z-coordinate {m}
+    11,                      !- Vertex 2 X-coordinate {m}
+    0,                       !- Vertex 2 Y-coordinate {m}
+    3,                       !- Vertex 2 Z-coordinate {m}
+    11,                      !- Vertex 3 X-coordinate {m}
+    0,                       !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    14,                      !- Vertex 4 X-coordinate {m}
+    0,                       !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+!- Tor 4, AW_Nord, x = 1 bis 4 m, z = 0 bis 3 m, A = 9 m2 (geschlossen)
+FenestrationSurface:Detailed,
+    gate 4,                  !- Name
+    Window,                  !- Surface Type
+    Tor,                     !- Construction Name
+    AW_Nord,                 !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    1,                       !- Vertex 1 X-coordinate {m}
+    60,                      !- Vertex 1 Y-coordinate {m}
+    3,                       !- Vertex 1 Z-coordinate {m}
+    4,                       !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    3,                       !- Vertex 2 Z-coordinate {m}
+    4,                       !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    1,                       !- Vertex 4 X-coordinate {m}
+    60,                      !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+!- Tor 5, AW_Nord, x = 6 bis 9 m, z = 0 bis 3 m, A = 9 m2 (offen in dieser Variante)
+FenestrationSurface:Detailed,
+    gate 5,                  !- Name
+    Window,                  !- Surface Type
+    Tor,                     !- Construction Name
+    AW_Nord,                 !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    6,                       !- Vertex 1 X-coordinate {m}
+    60,                      !- Vertex 1 Y-coordinate {m}
+    3,                       !- Vertex 1 Z-coordinate {m}
+    9,                       !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    3,                       !- Vertex 2 Z-coordinate {m}
+    9,                       !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    6,                       !- Vertex 4 X-coordinate {m}
+    60,                      !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+!- Tor 6, AW_Nord, x = 11 bis 14 m, z = 0 bis 3 m, A = 9 m2 (geschlossen)
+FenestrationSurface:Detailed,
+    gate 6,                  !- Name
+    Window,                  !- Surface Type
+    Tor,                     !- Construction Name
+    AW_Nord,                 !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    11,                      !- Vertex 1 X-coordinate {m}
+    60,                      !- Vertex 1 Y-coordinate {m}
+    3,                       !- Vertex 1 Z-coordinate {m}
+    14,                      !- Vertex 2 X-coordinate {m}
+    60,                      !- Vertex 2 Y-coordinate {m}
+    3,                       !- Vertex 2 Z-coordinate {m}
+    14,                      !- Vertex 3 X-coordinate {m}
+    60,                      !- Vertex 3 Y-coordinate {m}
+    0,                       !- Vertex 3 Z-coordinate {m}
+    11,                      !- Vertex 4 X-coordinate {m}
+    60,                      !- Vertex 4 Y-coordinate {m}
+    0;                       !- Vertex 4 Z-coordinate {m}
+
+
+!- ============================================================================
+!-   THERMOSTAT UND IDEAL LOADS
+!- ============================================================================
+
+ZoneControl:Thermostat,
+    Thermostat,              !- Name
+    Zone_Halle,              !- Zone or ZoneList Name
+    Sch_Regelungsart,        !- Control Type Schedule Name
+    ThermostatSetpoint:SingleHeatingOrCooling, !- Control 1 Object Type
+    Sollwert_iso;            !- Control 1 Name
+
+ThermostatSetpoint:SingleHeatingOrCooling,
+    Sollwert_iso,            !- Name
+    Sch_T_iso;               !- Setpoint Temperature Schedule Name
+
+ZoneHVAC:IdealLoadsAirSystem,
+    IdealLoads,              !- Name
+    ,                        !- Availability Schedule Name
+    Inlet_Node,              !- Zone Supply Air Node Name
+    ,                        !- Zone Exhaust Air Node Name
+    ,                        !- System Inlet Air Node Name
+    50,                      !- Maximum Heating Supply Air Temperature {C}
+    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    0.0156,                  !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+    0.0077,                  !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+    NoLimit,                 !- Heating Limit
+    ,                        !- Maximum Heating Air Flow Rate {m3/s}
+    ,                        !- Maximum Sensible Heating Capacity {W}
+    NoLimit,                 !- Cooling Limit
+    ,                        !- Maximum Cooling Air Flow Rate {m3/s}
+    ,                        !- Maximum Total Cooling Capacity {W}
+    ,                        !- Heating Availability Schedule Name
+    ,                        !- Cooling Availability Schedule Name
+    None,                    !- Dehumidification Control Type
+    ,                        !- Cooling Sensible Heat Ratio {dimensionless}
+    None,                    !- Humidification Control Type
+    ,                        !- Design Specification Outdoor Air Object Name
+    ,                        !- Outdoor Air Inlet Node Name
+    None,                    !- Demand Controlled Ventilation Type
+    NoEconomizer,            !- Outdoor Air Economizer Type
+    None,                    !- Heat Recovery Type
+    ,                        !- Sensible Heat Recovery Effectiveness {dimensionless}
+    ;                        !- Latent Heat Recovery Effectiveness {dimensionless}
+
+ZoneHVAC:EquipmentList,
+    EquipmentList,           !- Name
+    SequentialLoad,          !- Load Distribution Scheme
+    ZoneHVAC:IdealLoadsAirSystem, !- Zone Equipment 1 Object Type
+    IdealLoads,              !- Zone Equipment 1 Name
+    1,                       !- Zone Equipment 1 Cooling Sequence
+    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
+    ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+    ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:EquipmentConnections,
+    Zone_Halle,              !- Zone Name
+    EquipmentList,           !- Zone Conditioning Equipment List Name
+    Inlet_Node,              !- Zone Air Inlet Node or NodeList Name
+    ,                        !- Zone Air Exhaust Node or NodeList Name
+    Zone_Node,               !- Zone Air Node Name
+    Return_Node;             !- Zone Return Air Node or NodeList Name
+
+
+!- ============================================================================
+!-   ZONEVENTILATION:DESIGNFLOWRATE
+!- ============================================================================
+
+!- Koeffizientensatz DEFAULT: A = 1, B = 0 1/K, C = 0 s/m, D = 0 s2/m2
+!- Q_vent = Design Flow Rate * F_Schedule * (A + B*|dT| + C*u + D*u^2)
+!- Ein einziges Objekt fuer beide Tore: das Modell bilanziert den
+!- Durchsatz der Halle, nicht die Einzeloeffnung.
+ZoneVentilation:DesignFlowRate,
+    DFR_DEFAULT,             !- Name
+    Zone_Halle,              !- Zone or ZoneList or Space or SpaceList Name
+    Sch_Tor_auf,             !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    7.658347,                !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    Natural,                 !- Ventilation Type
+    0.0,                     !- Fan Pressure Rise {Pa}
+    1.0,                     !- Fan Total Efficiency
+    1,                       !- Constant Term Coefficient
+    0,                       !- Temperature Term Coefficient
+    0,                       !- Velocity Term Coefficient
+    0,                       !- Velocity Squared Term Coefficient
+    -100.0,                  !- Minimum Indoor Temperature {C}
+    ,                        !- Minimum Indoor Temperature Schedule Name
+    100.0,                   !- Maximum Indoor Temperature {C}
+    ,                        !- Maximum Indoor Temperature Schedule Name
+    -100.0,                  !- Delta Temperature {deltaC}
+    ,                        !- Delta Temperature Schedule Name
+    -100.0,                  !- Minimum Outdoor Temperature {C}
+    ,                        !- Minimum Outdoor Temperature Schedule Name
+    100.0,                   !- Maximum Outdoor Temperature {C}
+    ,                        !- Maximum Outdoor Temperature Schedule Name
+    40.0;                    !- Maximum Wind Speed {m/s}
+
+
+!- ============================================================================
+!-   OUTPUT
+!- ============================================================================
+
+Output:VariableDictionary,
+    IDF,                     !- Key Field
+    Unsorted;                !- Sort Option
+
+Output:Table:SummaryReports,
+    AllSummary;              !- Report 1 Name
+
+OutputControl:Table:Style,
+    HTML;                    !- Column Separator
+
+Output:SQLite,
+    SimpleAndTabular;        !- Option Type
+
+Output:Diagnostics,
+    DisplayAllWarnings,      !- Key 1
+    DisplayAdvancedReportVariables; !- Key 2
+
+!- Massgebend fuer den Vergleich mit der Handrechnung:
+!- Zone Ventilation CURRENT Density Volume Flow Rate. Das Feld
+!- Density Basis bleibt leer, Default Outdoor, also ist der Massenstrom
+!- Q_soll * rho_aussen. Bei T_zone = T_aussen ist rho_zone = rho_aussen
+!- und die Current-Density-Variante trifft Q_soll. Die
+!- Standard-Density-Variante rechnet auf die Normdichte der
+!- Standardatmosphaere um und liegt rund 1 Prozent daneben - das ist
+!- keine Modellabweichung, sondern eine Dichteumrechnung.
+!- Falls eine Variable in eplusout.err als unbekannt gemeldet wird, den
+!- Namen aus eplusout.rdd uebernehmen - Output:VariableDictionary ist aktiv.
+Output:Variable,
+    *,                       !- Key Value
+    Site Wind Speed,         !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Site Wind Direction,     !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Site Outdoor Air Drybulb Temperature, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Outdoor Air Wind Speed, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Outdoor Air Drybulb Temperature, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Mean Air Temperature, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ideal Loads Supply Air Total Heating Rate, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ideal Loads Supply Air Total Cooling Rate, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ventilation Current Density Volume Flow Rate, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ventilation Standard Density Volume Flow Rate, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ventilation Current Density Air Change Rate, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ventilation Mass Flow Rate, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
+Output:Variable,
+    *,                       !- Key Value
+    Zone Ventilation Sensible Heat Loss Energy, !- Variable Name
+    Timestep;                !- Reporting Frequency
+
