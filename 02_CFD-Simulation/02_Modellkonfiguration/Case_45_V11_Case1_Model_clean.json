@@ -1,0 +1,382 @@
+{
+  "case_name": "ProfMaileModel_case45",
+  "simulationType": "IndoorSpaces",
+  "version": "1.0",
+  "levels": {
+    "0": {
+      "height": 36,
+      "deck": 0.35,
+      "ceiling": {
+        "temp": 17,
+        "emissivity": 0.9,
+        "airEntries": []
+      },
+      "floor": {
+        "temp": 17,
+        "emissivity": 0.9,
+        "airEntries": []
+      },
+      "walls": [
+        {
+          "id": "wall_0F_1",
+          "start": {
+            "x": 147.81,
+            "y": 22.26
+          },
+          "end": {
+            "x": 78.62,
+            "y": 189.31
+          },
+          "temp": 17,
+          "material": "default",
+          "emissivity": 0.9,
+          "airEntries": []
+        },
+        {
+          "id": "wall_0F_2",
+          "start": {
+            "x": 78.62,
+            "y": 189.31
+          },
+          "end": {
+            "x": -235.37,
+            "y": 59.26
+          },
+          "temp": 17,
+          "material": "default",
+          "emissivity": 0.9,
+          "airEntries": [
+            {
+              "id": "vent_0F_2",
+              "type": "vent",
+              "position": {
+                "x": -78.375,
+                "y": 124.285,
+                "z": 18,
+                "normal": {
+                  "x": 0.38266,
+                  "y": 0.92389,
+                  "z": 0
+                }
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "dimensions": {
+                "width": 339,
+                "height": 35,
+                "shape": "rectangular"
+              },
+              "simulation": {
+                "state": "open",
+                "temperature": 17,
+                "airDirection": "outflow",
+                "flowDirection": {
+                  "x": -0.38266,
+                  "y": 0.92389,
+                  "z": 0
+                },
+                "verticalAngle": 0,
+                "horizontalAngle": 0,
+                "flowType": "pressure",
+                "flowIntensity": "custom",
+                "customValue": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "wall_0F_3",
+          "start": {
+            "x": -235.37,
+            "y": 59.26
+          },
+          "end": {
+            "x": -166.17,
+            "y": -107.8
+          },
+          "temp": 17,
+          "material": "default",
+          "emissivity": 0.9,
+          "airEntries": []
+        },
+        {
+          "id": "wall_0F_4",
+          "start": {
+            "x": -166.17,
+            "y": -107.8
+          },
+          "end": {
+            "x": 147.81,
+            "y": 22.26
+          },
+          "temp": 17,
+          "material": "default",
+          "emissivity": 0.9,
+          "airEntries": [
+            {
+              "id": "vent_0F_1",
+              "type": "vent",
+              "position": {
+                "x": -9.18,
+                "y": -42.77,
+                "z": 18,
+                "normal": {
+                  "x": -0.3827,
+                  "y": -0.92387,
+                  "z": 0
+                }
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "dimensions": {
+                "width": 339,
+                "height": 35,
+                "shape": "rectangular"
+              },
+              "simulation": {
+                "state": "open",
+                "temperature": 17,
+                "airDirection": "inflow",
+                "flowDirection": {
+                  "x": -0.3827,
+                  "y": 0.92387,
+                  "z": 0
+                },
+                "verticalAngle": 0,
+                "horizontalAngle": 0,
+                "flowType": "velocity",
+                "flowIntensity": "custom",
+                "customValue": 5.1
+              }
+            }
+          ]
+        }
+      ],
+      "stairs": [],
+      "furniture": [
+        {
+          "id": "object_0F_block_1",
+          "position": {
+            "x": 7.5,
+            "y": 30,
+            "z": 12
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 15,
+            "height": 0.22,
+            "depth": 60
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_3",
+          "position": {
+            "x": 0.11,
+            "y": 30,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 0.22,
+            "height": 12,
+            "depth": 60
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_4",
+          "position": {
+            "x": 14.89,
+            "y": 30,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 0.21991999999999998,
+            "height": 12,
+            "depth": 60
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_6",
+          "position": {
+            "x": 0.66,
+            "y": 59.89,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 0.88,
+            "height": 12,
+            "depth": 0.22
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_7",
+          "position": {
+            "x": 11.89,
+            "y": 0.11,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 5.78,
+            "height": 12,
+            "depth": 0.22
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_8",
+          "position": {
+            "x": 2.5,
+            "y": 59.89,
+            "z": 3
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 3,
+            "height": 8.99992,
+            "depth": 0.22
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_9",
+          "position": {
+            "x": 3.11,
+            "y": 0.11,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 5.78,
+            "height": 12,
+            "depth": 0.22
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_10",
+          "position": {
+            "x": 9.39,
+            "y": 59.89,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 10.78,
+            "height": 12,
+            "depth": 0.22
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        },
+        {
+          "id": "object_0F_block_11",
+          "position": {
+            "x": 7.5,
+            "y": 0.11,
+            "z": 3
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "dimensions": {
+            "width": 3,
+            "height": 9,
+            "depth": 0.22
+          },
+          "simulationProperties": {
+            "temperature": 17,
+            "material": "default",
+            "emissivity": 0.9,
+            "thermalBCMode": "fixedT"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         steadyState;
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+}
+
+divSchemes
+{
+    default         none;
+
+    div(phi,U)      bounded Gauss linearUpwind grad(U);
+    
+    // Temperature transport (for buoyantBoussinesqSimpleFoam)
+    div(phi,T)      bounded Gauss linearUpwind grad(T);
+    
+    // Turbulence model kOmegaSST
+    div(phi,k)      bounded Gauss upwind;
+    div(phi,omega)  bounded Gauss upwind;
+    
+    div(phi,K)      bounded Gauss upwind;
+
+    // Laminar stress tensor (for Boussinesq)
+    div((nuEff*dev2(T(grad(U)))))   Gauss linear;
+    
+    // Scalar transport (CO2) - upwind puro para máxima estabilidad [0,1]
+    div(phi,CO2)    bounded Gauss upwind;
+    
+    // Mean Age of Air (τ) - upwind puro; τ no tiene cota superior → sin 'bounded'
+    div(phi,age)    Gauss upwind;
+    
+    // Radiation P1 model
+    div(phi,G)      bounded Gauss upwind;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+wallDist
+{
+    method meshWave;
+}
+
+
+// ************************************************************************* //

@@ -1,0 +1,909 @@
+{
+  "nodes": [
+    {
+      "id": "Gesamtmenge_der_Gewichte",
+      "title": "Gesamtmenge der Gewichte",
+      "formula": "W=\\sum_{i=1}^{n}w_{i}",
+      "content": null,
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Anteil_der_Lkws_in",
+          "relation": "eingesetzt"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Anteil_der_Lkws_in",
+      "title": "Anteil der Lkws in einer Zeitspanne",
+      "formula": "p_{i}={\\frac{w_{i}}{W}}",
+      "content": null,
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Anzahl_der_Lkws_pro",
+          "relation": "eingesetzt"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Gesamtmenge_der_Gewichte",
+          "relation": "eingesetzt"
+        }
+      ]
+    },
+    {
+      "id": "Anzahl_der_Lkws_pro",
+      "title": "Anzahl der Lkws pro Zeitspanne",
+      "formula": "{\\cal N}_{i}=N\\cdot p_{i}=N\\cdot\\frac{w_{i}}{W}",
+      "content": null,
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Anteil_der_Lkws_in",
+          "relation": "eingesetzt"
+        },
+        {
+          "node": "Gesamtmenge_der_LKWS_pro",
+          "relation": "eingesetzt"
+        }
+      ]
+    },
+    {
+      "id": "Syntheseschritt",
+      "title": "Synthese_schritt",
+      "formula": null,
+      "content": "Bilde aus den Graphen ein entwurf für ein python programm das die Anlieferung den Lagerbestand die Abholung e eines Crossdocking Centers Abbildet auf basis der Wochenarbeitsmatrix der Wochen und Jahresverteilung , Anzahl der Tore , Beladungs entladungszeiten je Lkw ,Hallengröße prozentuale Umschlagsfläche .",
+      "attributes": [],
+      "notes": [],
+      "related_to": [],
+      "related_from": [
+        {
+          "node": "Anzahl_der_Lkws_pro",
+          "relation": "Basis"
+        },
+        {
+          "node": "Modifizierbare_gewichtete_Wochenarbeitsmatrix",
+          "relation": "Basis"
+        },
+        {
+          "node": "Mathematische_Bedingungen_speziell_fuer",
+          "relation": "basis"
+        },
+        {
+          "node": "Allgemeine_Bestandsgleichung",
+          "relation": "basis"
+        },
+        {
+          "node": "Lkesje_schicht",
+          "relation": "Basis"
+        },
+        {
+          "node": "Be_und_Endtladezeit_LKW",
+          "relation": "Parameter"
+        },
+        {
+          "node": "Prozentual_genutzte_Hallengroesse",
+          "relation": "Parameter"
+        },
+        {
+          "node": "Anzahl_der_Tore",
+          "relation": "Parameter"
+        },
+        {
+          "node": "Lkesje_schicht",
+          "relation": null
+        }
+      ]
+    },
+    {
+      "id": "Logistiksimulation",
+      "title": "Logistiksimulation",
+      "formula": null,
+      "content": null,
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Schichten_des_Tages",
+          "relation": "übergeordnetes Thema"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Schichten_des_Tages",
+      "title": "Schichten des Tages",
+      "formula": null,
+      "content": "Unterteilung des Logistiktages in 5 gleiche Zeitspannen",
+      "attributes": [
+        "Morgen",
+        "Mittag",
+        "Nachmittal",
+        "Abends",
+        "Nachts"
+      ],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Auslastungsstrufen_wi",
+          "relation": "Zugrundeliegende Zeitspannen"
+        },
+        {
+          "node": "Wochenarbeits_matrix_ohne_Gewichte",
+          "relation": "Vektor aller Schichten s=\\left(s_{1}\\ \\ \\ s_{2}\\ \\ \\ s_{3}\\ \\ \\ s_{4}\\ \\ \\ s_{5}\\right)"
+        },
+        {
+          "node": "Gewichte_eines_Standart_Arbeitstages",
+          "relation": "Vektor aller Schichten s=\\left(s_{1}\\ \\ \\ s_{2}\\ \\ \\ s_{3}\\ \\ \\ s_{4}\\ \\ \\ s_{5}\\right) als basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Logistiksimulation",
+          "relation": "übergeordnetes Thema"
+        }
+      ]
+    },
+    {
+      "id": "Auslastungsstrufen_wi",
+      "title": "Auslastungsstrufen w_i",
+      "formula": null,
+      "content": "Gewichte die bestimmen wie hoch die Auslastung in einer Logistikzeitspanne des Tages ist. Jede Zeitspanne erhält ein Gewicht",
+      "attributes": [
+        "niedrig w_{2}=2",
+        "Mittel w_{3}=3",
+        "sehr Hoch w_{5}=5",
+        "Hoch w_{4}=4",
+        "Keine w_{1}=1"
+      ],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Gewichte_eines_Standart_Arbeitstages",
+          "relation": "jeder Schicht wird eine Auslastungsstufe zugeordnet"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Schichten_des_Tages",
+          "relation": "Zugrundeliegende Zeitspannen"
+        }
+      ]
+    },
+    {
+      "id": "Wochenarbeits_matrix_ohne_Gewichte",
+      "title": "Wochenarbeits matrix ohne Gewichte",
+      "formula": "\\begin{array}{l|ccccc}<br>\\textbf{Tagesvektor } (d) \\setminus \\textbf{Schichtenvektor } (s) &amp; s_1 \\text{ (Morgen)} &amp; s_2 \\text{ (Mittag)} &amp; s_3 \\text{ (Nachmittag)} &amp; s_4 \\text{ (Abends)} &amp; s_5 \\text{ (Nachts)} \\\\<br>\\hline<br>d_1 \\text{ (Montag)} &amp; m_{1,1} &amp; m_{1,2} &amp; m_{1,3} &amp; m_{1,4} &amp; m_{1,5} \\\\<br>d_2 \\text{ (Dienstag)} &amp; m_{2,1} &amp; m_{2,2} &amp; m_{2,3} &amp; m_{2,4} &amp; m_{2,5} \\\\<br>d_3 \\text{ (Mittwoch)} &amp; m_{3,1} &amp; m_{3,2} &amp; m_{3,3} &amp; m_{3,4} &amp; m_{3,5} \\\\<br>d_4 \\text{ (Donnerstag)} &amp; m_{4,1} &amp; m_{4,2} &amp; m_{4,3} &amp; m_{4,4} &amp; m_{4,5} \\\\<br>d_5 \\text{ (Freitag)} &amp; m_{5,1} &amp; m_{5,2} &amp; m_{5,3} &amp; m_{5,4} &amp; m_{5,5} \\\\<br>d_6 \\text{ (Samstag)} &amp; m_{6,1} &amp; m_{6,2} &amp; m_{6,3} &amp; m_{6,4} &amp; m_{6,5} \\\\<br>d_7 \\text{ (Sonntag)} &amp; m_{7,1} &amp; m_{7,2} &amp; m_{7,3} &amp; m_{7,4} &amp; m_{7,5} \\\\<br>\\end{array}",
+      "content": null,
+      "attributes": [],
+      "notes": [
+        "Die Wochenarbeitsmatrix ist eine 7×5 Matrix:",
+        "Die werte der Matrix liegen bei 0 oder 1 je nachdem ob an dem Tag gearbeitet wird oder nicht"
+      ],
+      "related_to": [
+        {
+          "node": "Kompakte_Schreibweise_der_Wochenarbeitsmatrix",
+          "relation": "basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Wochentage_an_denen_Gearbeitet",
+          "relation": "Vektor mit den Tagen die einen Wert von 1 haben d={\\left(\\begin{array}{l}{d_{1}}\\\\ {d_{2}}\\\\ {\\vdots}\\\\ {d_{\\tau}}\\end{array}\\right)}\\in\\{0,1\\}^{7}"
+        },
+        {
+          "node": "Schichten_des_Tages",
+          "relation": "Vektor aller Schichten s=\\left(s_{1}\\ \\ \\ s_{2}\\ \\ \\ s_{3}\\ \\ \\ s_{4}\\ \\ \\ s_{5}\\right)"
+        }
+      ]
+    },
+    {
+      "id": "Gewichte_eines_Standart_Arbeitstages",
+      "title": "Gewichte eines Standart Arbeitstages",
+      "formula": "s = \\begin{pmatrix} w_1 &amp; w_2 &amp; w_3 &amp; w_4 &amp; w_5 \\end{pmatrix} \\in \\mathbb{R}^5",
+      "content": null,
+      "attributes": [],
+      "notes": [
+        "Es werden den Schichten auslastungsgewichte w_j zugeordnet"
+      ],
+      "related_to": [
+        {
+          "node": "elementweise_Multiplikation_Matrix_Vektor",
+          "relation": "elementweise Multiplikation"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Schichten_des_Tages",
+          "relation": "Vektor aller Schichten s=\\left(s_{1}\\ \\ \\ s_{2}\\ \\ \\ s_{3}\\ \\ \\ s_{4}\\ \\ \\ s_{5}\\right) als basis"
+        },
+        {
+          "node": "Auslastungsstrufen_wi",
+          "relation": "jeder Schicht wird eine Auslastungsstufe zugeordnet"
+        }
+      ]
+    },
+    {
+      "id": "Kompakte_Schreibweise_der_Wochenarbeitsmatrix",
+      "title": "Kompakte Schreibweise der Wochenarbeitsmatrix",
+      "formula": "M = \\begin{pmatrix}<br>m_{1,1} &amp; m_{1,2} &amp; m_{1,3} &amp; m_{1,4} &amp; m_{1,5} \\\\<br>m_{2,1} &amp; m_{2,2} &amp; m_{2,3} &amp; m_{2,4} &amp; m_{2,5} \\\\<br>\\vdots &amp; \\vdots &amp; \\vdots &amp; \\vdots &amp; \\vdots \\\\<br>m_{7,1} &amp; m_{7,2} &amp; m_{7,3} &amp; m_{7,4} &amp; m_{7,5}<br>\\end{pmatrix} \\in \\{0,1\\}^{7 \\times 5}",
+      "content": null,
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "elementweise_Multiplikation_Matrix_Vektor",
+          "relation": "Basis Matrix M"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Wochenarbeits_matrix_ohne_Gewichte",
+          "relation": "basis"
+        }
+      ]
+    },
+    {
+      "id": "elementweise_Multiplikation_Matrix_Vektor",
+      "title": "elementweise Multiplikation Matrix Vektor",
+      "formula": "M' = M \\circ \\begin{pmatrix} w_{1} \\\\w_{2}<br>&nbsp;\\\\ \\vdots \\\\ w_{5}<br>&nbsp;\\end{pmatrix} =\\begin{pmatrix}<br>m_{1,1} \\cdot w_1 &amp; m_{1,2} \\cdot w_2 &amp; \\cdots &amp; m_{1,5} \\cdot w_5 \\\\<br>m_{2,1} \\cdot w_1 &amp; m_{2,2} \\cdot w_2 &amp; \\cdots &amp; m_{2,5} \\cdot w_5 \\\\<br>\\vdots &amp; \\vdots &amp; \\ddots &amp; \\vdots \\\\<br>m_{7,1} \\cdot w_1 &amp; m_{7,2} \\cdot w_2 &amp; \\cdots &amp; m_{7,5} \\cdot w_5<br>\\end{pmatrix}",
+      "content": null,
+      "attributes": [],
+      "notes": [
+        "Die so entstandene Matrix zeigt beschreibt den durch die einzelnen Elemente Wochenarbeitsmatrix und Gewichteter Standart Tag eine standart Arbetiswoche mit Ihrer Gewichteten auslastung über die Schichten hinweg"
+      ],
+      "related_to": [
+        {
+          "node": "Modifizierbare_gewichtete_Wochenarbeitsmatrix",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Kompakte_Schreibweise_der_Wochenarbeitsmatrix",
+          "relation": "Basis Matrix M"
+        },
+        {
+          "node": "Gewichte_eines_Standart_Arbeitstages",
+          "relation": "elementweise Multiplikation"
+        }
+      ]
+    },
+    {
+      "id": "Modifizierbare_gewichtete_Wochenarbeitsmatrix",
+      "title": "Modifizierbare gewichtete Wochenarbeitsmatrix",
+      "formula": "M' \\in \\mathbb{R}^{7 \\times 5}",
+      "content": null,
+      "attributes": [],
+      "notes": [
+        "Die resultierende Matrix M′ gibt die gewichtete Auslastung für jede Schicht j an jedem Wochentag i an",
+        "Die Gewichtung der gewichteten Standart Wochenarbeitsmatrix kann noch manuel in einem datagridview angepasst werden",
+        "Die visualisierung erfolgt in einem Datagridview"
+      ],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "Basis"
+        },
+        {
+          "node": "Ebene_1_Jahr_zu",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "elementweise_Multiplikation_Matrix_Vektor",
+          "relation": "Basis"
+        }
+      ]
+    },
+    {
+      "id": "Ebene_1_Jahr_zu",
+      "title": "Ebene 1: Jahr zu Monat (Saisonalität)",
+      "formula": null,
+      "content": "* \\(N_{Jahr}\\): Gesamtzahl der LKWs im Jahr.* \\(v_m\\): Das Gewicht eines bestimmten Monats \\(m\\) (z.B. Januar = 1, Dezember = 3).* \\(V_{Jahr}\\): Die Summe aller 12 Monatsgewichte (\\(V_{Jahr} = \\sum_{k=1}^{12} v_k\\)).* **LKW-Menge für Monat \\(m\\):** \\(N_{Monat, m} = N_{Jahr} \\cdot \\frac{v_m}{V_{Jahr}}\\)",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Ebene_2_Monat_zu",
+          "relation": "Übergeordnete Verteilung"
+        },
+        {
+          "node": "Die_kombinierte_Gesamtformel_Gestapelte",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Modifizierbare_gewichtete_Wochenarbeitsmatrix",
+          "relation": "Basis"
+        }
+      ]
+    },
+    {
+      "id": "Ebene_2_Monat_zu",
+      "title": "Ebene 2: Monat zu Woche (Untermonatliche Schwankung)",
+      "formula": null,
+      "content": "* \\(u_w\\): Das Gewicht einer bestimmten Woche \\(w\\) in diesem Monat \\(m\\).* \\(U_{Monat, m}\\): Die Summe der Wochengewichte des betreffenden Monats (\\(U_{Monat, m} = \\sum u_w\\)).* **LKW-Menge für Woche \\(w\\):** \\(N_{Woche, w} = N_{Monat, m} \\cdot \\frac{u_w}{U_{Monat, m}}\\)",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Ebene_3_Woche_zu",
+          "relation": "Übergeordnete Verteilung"
+        },
+        {
+          "node": "Die_kombinierte_Gesamtformel_Gestapelte",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Ebene_1_Jahr_zu",
+          "relation": "Übergeordnete Verteilung"
+        }
+      ]
+    },
+    {
+      "id": "Die_kombinierte_Gesamtformel_Gestapelte",
+      "title": "Die kombinierte Gesamtformel (\"Gestapelte Matrix\"",
+      "formula": null,
+      "content": "Wenn Sie die Gleichungen ineinander einsetzen, erhalten Sie eine einzige, durchgehende Formel. Die Anzahl der LKWs für eine **spezifische Schicht \\(i\\) an Tag \\(j\\) in Woche \\(w\\) des Monats \\(m\\)** berechnet sich durch die fortlaufende Multiplikation der relativen Anteile: \\(l_{m, w, j, i} = N_{Jahr} \\cdot \\left( \\frac{v_m}{V_{Jahr}} \\right) \\cdot \\left( \\frac{u_w}{U_{Monat, m}} \\right) \\cdot \\left( \\frac{m_{w, j,i}}{W_{Woche, w}} \\right)\\) ### 3. Was bedeutet das für Ihre Matrizen? (Tensoren) Mathematisch gesehen verlassen Sie durch das Stapeln die einfache 2D-Matrix und bauen einen **Tensor** (eine mehrdimensionale Matrix). * Eine Woche ist eine \\(7 \\times 5\\) Matrix.* Ein Monat mit (durchschnittlich) 4 Wochen wird zu einem \\(4 \\times 7 \\times 5\\) Tensor.* Ein Jahr wird zu einem \\(12 \\times 4 \\times 7 \\times 5\\) Tensor.",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Lkesje_schicht",
+          "relation": "basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Ebene_1_Jahr_zu",
+          "relation": "Basis"
+        },
+        {
+          "node": "Ebene_2_Monat_zu",
+          "relation": "Basis"
+        },
+        {
+          "node": "Ebene_3_Woche_zu",
+          "relation": "Basis"
+        }
+      ]
+    },
+    {
+      "id": "Ebene_3_Woche_zu",
+      "title": "Ebene 3: Woche zu Schicht (Ihre gewichtete Wochenarbeitsmatrix)",
+      "formula": null,
+      "content": "* \\(m_{w, j,i}\\): Das Gewicht in Ihrer Matrix für Tag \\(j\\), Schicht \\(i\\).* \\(W_{Woche, w}\\): Die Summe aller Matrixgewichte der spezifischen Woche (\\(W_{Woche, w} = \\sum_{j=1}^{7} \\sum_{i=1}^{5} m_{w, j,i}\\)).* **LKW-Menge für die exakte Schicht:** \\(l_{j,i} = N_{Woche, w} \\cdot \\frac{m_{w, j,i}}{W_{Woche, w}}\\)",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Die_kombinierte_Gesamtformel_Gestapelte",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Ebene_2_Monat_zu",
+          "relation": "Übergeordnete Verteilung"
+        }
+      ]
+    },
+    {
+      "id": "Lkesje_schicht",
+      "title": "Lkes_je schicht",
+      "formula": "{ L}=\\frac{N_{W o c h e}}{W_{W o c h e}}\\cdot M_{w}",
+      "content": null,
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "Basis"
+        },
+        {
+          "node": "Syntheseschritt",
+          "relation": null
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Die_kombinierte_Gesamtformel_Gestapelte",
+          "relation": "basis"
+        }
+      ]
+    },
+    {
+      "id": "Durchschnittliche_Lkws_Pro_Tag",
+      "title": "Durchschnittliche Lkws Pro Tag",
+      "formula": null,
+      "content": "Jahresdurchschnitt der ankommenden Lkws pro Tag",
+      "attributes": [
+        "Möglicher Eingabe"
+      ],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Anzahl_der_Lkws_pro_2",
+          "relation": "Berechung der Jahres Lkw Menge"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Anzahl_der_Lkws_pro_2",
+      "title": "Anzahl der Lkws pro Jahr",
+      "formula": null,
+      "content": "Wieviele Lkws kommen pro Jahr an",
+      "attributes": [
+        "Möglicher Eingabe"
+      ],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Anzahl_der_Lkws_pro_3",
+          "relation": null
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Durchschnittliche_Lkws_Pro_Tag",
+          "relation": "Berechung der Jahres Lkw Menge"
+        }
+      ]
+    },
+    {
+      "id": "Anzahl_der_Lkws_pro_3",
+      "title": "Anzahl der Lkws pro Monat",
+      "formula": null,
+      "content": "Wieviele Lkws kommen in diesem Monat an",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Anzahl_der_Lkws_pro_4",
+          "relation": null
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Anzahl_der_Lkws_pro_2",
+          "relation": null
+        }
+      ]
+    },
+    {
+      "id": "Anzahl_der_Lkws_pro_4",
+      "title": "Anzahl der Lkws pro Woche",
+      "formula": null,
+      "content": "Wieviele Lkws kommen in dieser Wche an",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Gesamtmenge_der_LKWS_pro",
+          "relation": null
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Anzahl_der_Lkws_pro_3",
+          "relation": null
+        }
+      ]
+    },
+    {
+      "id": "Gesamtmenge_der_LKWS_pro",
+      "title": "Gesamtmenge der LKWS pro Tag",
+      "formula": null,
+      "content": "Wieviele Lkws kommen pro Tag an",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Anzahl_der_Lkws_pro",
+          "relation": "eingesetzt"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Anzahl_der_Lkws_pro_4",
+          "relation": null
+        }
+      ]
+    },
+    {
+      "id": "Wochentage_an_denen_Gearbeitet",
+      "title": "Wochentage an denen Gearbeitet wird",
+      "formula": null,
+      "content": "Für jeden Tag gibt es einen Wert 0 oder 1 der Bestimmt ob an dem Tag gearbeitet wird und LKWs ankommen",
+      "attributes": [
+        "Dienstag",
+        "Mitwoch",
+        "Donnerstag",
+        "Freitag",
+        "Samstag",
+        "Montag",
+        "Sonntag"
+      ],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Wochenarbeits_matrix_ohne_Gewichte",
+          "relation": "Vektor mit den Tagen die einen Wert von 1 haben d={\\left(\\begin{array}{l}{d_{1}}\\\\ {d_{2}}\\\\ {\\vdots}\\\\ {d_{\\tau}}\\end{array}\\right)}\\in\\{0,1\\}^{7}"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Logistiklager_Arten",
+      "title": "Logistiklager Arten",
+      "formula": null,
+      "content": "die für die Simulationswerkzeug relevanten Logistiktypebn sind : - Crossdocking - Distribution -Lager",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Crossdocking",
+          "relation": "Überbegriff"
+        },
+        {
+          "node": "Distributionslager",
+          "relation": "Überbegriff"
+        },
+        {
+          "node": "Fabrik_Lagerhalle_Wareneingang",
+          "relation": "Überbegriff"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Crossdocking",
+      "title": "Crossdocking",
+      "formula": null,
+      "content": "Ware wird meist am selben Tag umverteilt . Zeitgleich oder mit einer Phasen verschiebung . z.B Morgens Anlieferung Abends Abholung . Die Lagerung erfolgt meistens ohne Einlagerung in Hochregal Lager ,sonden auf der Fläche der Halle , Das Ziel ist schnelles Kommisionieren und Umverteilen der Ladungen von Ankunftsbucht zu Abholungsbucht.",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Allgemeine_Bestandsgleichung",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Logistiklager_Arten",
+          "relation": "Überbegriff"
+        }
+      ]
+    },
+    {
+      "id": "Distributionslager",
+      "title": "Distributionslager",
+      "formula": null,
+      "content": "Waren werden über längere Zeit Vorgehalten um z.B E Comerce shops zu bedienen . Dabei gibt es Waren die als schnell Läufer den Prozess durchlaufen und Waren die eine längere Verweildauer haben . Die Grundauslastung des Hochregals liegt bei ca 70 %. Bei Ereignissen Wie Ostern oder Weinachten / Black Friday wird die Hochregalauslastung auf bis zu 95% über eine längere gesteigerte Anlieferungsperiode, vor dem Verkaufsereigniss angehoben. Dieser Angelegte Überschuss wird dann beim Sesionalen Verkaufsereigniss schlagartig Abgebaut. Es werden nur noch Abhholungen in einer kurzen Zeitspanne getätigt bis das Verkaufsereigniss vorüber ist und sich der Lagerbestand wieder normalisiert.",
+      "attributes": [],
+      "notes": [],
+      "related_to": [],
+      "related_from": [
+        {
+          "node": "Logistiklager_Arten",
+          "relation": "Überbegriff"
+        }
+      ]
+    },
+    {
+      "id": "Fabrik_Lagerhalle_Wareneingang",
+      "title": "Fabrik Lagerhalle Wareneingang",
+      "formula": null,
+      "content": "Die An eine Produktionsstätte Angegliederte Warenlagerung hat klar Definierte und planbare Abholungsströme . Die Abholung erfolgt dabei nicht per LKW sondern als kontinuierlicher Prozess der durch die Fertigungsauslastung bedingt ist. Dadurch ergibt sich eine Schubweiße Anliegerung der Ladung durch LKWs und ein stetiger Abfluss in die Fertigung",
+      "attributes": [],
+      "notes": [],
+      "related_to": [],
+      "related_from": [
+        {
+          "node": "Logistiklager_Arten",
+          "relation": "Überbegriff"
+        }
+      ]
+    },
+    {
+      "id": "Allgemeine_Bestandsgleichung",
+      "title": "Allgemeine Bestandsgleichung",
+      "formula": null,
+      "content": "Der Lagerbestand über das Jahr wird kontinuierlich durch Zu- und Abflüsse berechnet. Die mathematische Rekursion für den Lagerbestand am Ende einer Schicht lautet: \\(I(t, s) = I(t, s-1) + A(t, s) - D(t, s)\\) *(Hinweis: Für die erste Schicht des Tages gilt \\(I(t, 1) = I(t-1, 5) + A(t, 1) - D(t, 1)\\), wobei für den allerersten Tag \\(I(1, 0) = I_0\\) gesetzt wird.)*",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Crossdocking",
+          "relation": "Basis"
+        },
+        {
+          "node": "Lagerbestand_ueber_das_Jahr",
+          "relation": "Basis"
+        },
+        {
+          "node": "Definition_der_Systemparameter",
+          "relation": "basis"
+        }
+      ]
+    },
+    {
+      "id": "Systemparameter_Logistik",
+      "title": "Systemparameter Logistik",
+      "formula": null,
+      "content": "Der Logistikprozess in der Halle wir Masgeblich durch 4 Größen Bestimmt : -Ankunft von Ware -Abholung von Ware -Lager Anfangsbestand -Lagerbestand: der Lagerbestand ist dabei eine Größe die aus Ankunft Abholung und Lageranfangsbestand Definiert ist",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Lagerbestand_Beginn",
+          "relation": "Übergeordnetes System"
+        },
+        {
+          "node": "Abholungsverteilung_Verteilung",
+          "relation": "Übergeordnets System"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Lagerbestand_Beginn",
+      "title": "Lagerbestand Beginn",
+      "formula": null,
+      "content": "Der Anfängliche Lagerbestand der Halle",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Lagerbestand_ueber_das_Jahr",
+          "relation": "Ausgangsgröße"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Systemparameter_Logistik",
+          "relation": "Übergeordnetes System"
+        }
+      ]
+    },
+    {
+      "id": "Abholungsverteilung_Verteilung",
+      "title": "Abholungsverteilung Verteilung",
+      "formula": null,
+      "content": "Eine Jährliche Verteilung wie die Ware angeliefert wird",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Lagerbestand_ueber_das_Jahr",
+          "relation": "Ausgangsgröße"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Systemparameter_Logistik",
+          "relation": "Übergeordnets System"
+        }
+      ]
+    },
+    {
+      "id": "Lagerbestand_ueber_das_Jahr",
+      "title": "Lagerbestand über das Jahr",
+      "formula": null,
+      "content": "Wie Verläuft der Lagerbestand über das Jahr Definiert durch Abholung Anliegerung und Anfangsbestand",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Allgemeine_Bestandsgleichung",
+          "relation": "Basis"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Lagerbestand_Beginn",
+          "relation": "Ausgangsgröße"
+        },
+        {
+          "node": "Ankunfts_Verteilung",
+          "relation": "Ausgangsgröße"
+        },
+        {
+          "node": "Abholungsverteilung_Verteilung",
+          "relation": "Ausgangsgröße"
+        }
+      ]
+    },
+    {
+      "id": "Ankunfts_Verteilung",
+      "title": "Ankunfts Verteilung",
+      "formula": null,
+      "content": "Eine Jährliche Verteilung wie die Ware angeliefert wird",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Lagerbestand_ueber_das_Jahr",
+          "relation": "Ausgangsgröße"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Definition_der_Systemparameter",
+      "title": "Definition der Systemparameter",
+      "formula": null,
+      "content": "Der Logistikprozess wird durch vier grundlegende Systemparameter bestimmt:* \\(I_0\\): **Lagerbestand Beginn** (Der anfängliche Lagerbestand der Halle).* \\(A(t, s)\\): **Ankunft von Ware** (Anlieferung) an einem Tag \\(t\\) in der Schicht \\(s\\).* \\(D(t, s)\\): **Abholung von Ware** (Abtransport) an einem Tag \\(t\\) in der Schicht \\(s\\).* \\(I(t, s)\\): **Lagerbestand** (Aktueller Bestand) am Tag \\(t\\) nach der Schicht \\(s\\), welcher sich aus Ankunft, Abholung und Anfangsbestand ergibt.",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Allgemeine_Bestandsgleichung",
+          "relation": "basis"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Mathematische_Bedingungen_speziell_fuer",
+      "title": "Mathematische Bedingungen speziell für Crossdocking",
+      "formula": null,
+      "content": "Mathematische Bedingungen speziell für Crossdocking Das Crossdocking-Lager hat spezifische Eigenschaften, die sich in mathematischen Nebenbedingungen (Constraints) ausdrücken lassen: -Selben Tag Umverteilung -Phasenverschiebung -Kapazitätsgrenze der Halle",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Kapazitaetsgrenze_der_Hallenflaeche",
+          "relation": "übergeordnet"
+        },
+        {
+          "node": "Phasenverschiebung_TimeShift_Delay",
+          "relation": "übergeordnet"
+        },
+        {
+          "node": "SelbeTagUmverteilung_SameDayClearing",
+          "relation": "übergeordnet"
+        },
+        {
+          "node": "Syntheseschritt",
+          "relation": "basis"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Kapazitaetsgrenze_der_Hallenflaeche",
+      "title": "Kapazitätsgrenze der Hallenfläche",
+      "formula": null,
+      "content": "Die Lagerung erfolgt beim Crossdocking nicht im Hochregallager,sondern ausschließlich auf der Fläche der Halle.Das Ziel ist ein schnelles Kommissionieren und Umverteilen.Wenn \\(C_{Fl\\ddot{a}che}\\) die maximale Stellplatzkapazität der Halle ist,ergibt sich die strikte Ungleichung für jede Schicht:\\(I(t, s) \\le C_{Fl\\ddot{a}che}\\)Da kein Hochregal genutzt wird, ist diese Kapazität \\(C_{Fl\\ddot{a}che}\\)deutlich geringer als bei einem Distributionslager,was den Zwang zur schnellen Phasenverschiebung (Bedingung B) mathematisch notwendig macht,um einen Überlauf des Lagers zu verhindern.",
+      "attributes": [],
+      "notes": [],
+      "related_to": [],
+      "related_from": [
+        {
+          "node": "Mathematische_Bedingungen_speziell_fuer",
+          "relation": "übergeordnet"
+        }
+      ]
+    },
+    {
+      "id": "Phasenverschiebung_TimeShift_Delay",
+      "title": "Phasenverschiebung (Time-Shift / Delay)",
+      "formula": null,
+      "content": "Die Umverteilung erfolgt oft mit einer Phasenverschiebung, zum Beispiel: Morgens Anlieferung (\\(s_1\\)) und Abends Abholung (\\(s_4\\)). Mathematisch lässt sich dies als zeitverzögerte Funktion darstellen, bei der die Abholung eine Funktion der Ankunft aus einer vorherigen Schicht ist (mit einer Verzögerung von \\(\\Delta s\\) Schichten):\\(D(t, s_{Abend}) = f(A(t, s_{Morgen}))\\)",
+      "attributes": [],
+      "notes": [],
+      "related_to": [],
+      "related_from": [
+        {
+          "node": "Mathematische_Bedingungen_speziell_fuer",
+          "relation": "übergeordnet"
+        }
+      ]
+    },
+    {
+      "id": "SelbeTagUmverteilung_SameDayClearing",
+      "title": "Selbe-Tag-Umverteilung (Same-Day-Clearing)",
+      "formula": null,
+      "content": "Beim Crossdocking wird die Ware meist am selben Tag umverteilt. Das bedeutet, dass die Summe der Ankünfte eines Tages der Summe der Abholungen desselben Tages entspricht. Der Netto-Zuwachs am Ende des Tages ist im Idealfall null:\\(\\sum_{s=1}^{5} A(t, s) = \\sum_{s=1}^{5} D(t, s)\\)Daraus folgt für den tagesübergreifenden Lagerbestand, dass der Bestand am Ende des Tages wieder auf das Basisniveau zurückfällt: \\(I(t, 5) \\approx I_{min}\\).",
+      "attributes": [],
+      "notes": [],
+      "related_to": [],
+      "related_from": [
+        {
+          "node": "Mathematische_Bedingungen_speziell_fuer",
+          "relation": "übergeordnet"
+        }
+      ]
+    },
+    {
+      "id": "Be_und_Endtladezeit_LKW",
+      "title": "Be und Endtladezeit LKW",
+      "formula": null,
+      "content": "Festgesetzte dauer einer LkW be und entladung",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "Parameter"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Hallengroesse",
+      "title": "Hallengröße",
+      "formula": null,
+      "content": "Größe der Halle Definiert mit Länge x Breite",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Prozentual_genutzte_Hallengroesse",
+          "relation": "Ausgangsgröße"
+        }
+      ],
+      "related_from": []
+    },
+    {
+      "id": "Prozentual_genutzte_Hallengroesse",
+      "title": "Prozentual genutzte Hallengröße",
+      "formula": null,
+      "content": "Prozentzualer genutzter Anteil der Für die Logistik genutzten Halle",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "Parameter"
+        }
+      ],
+      "related_from": [
+        {
+          "node": "Hallengroesse",
+          "relation": "Ausgangsgröße"
+        }
+      ]
+    },
+    {
+      "id": "Anzahl_der_Tore",
+      "title": "Anzahl der Tore",
+      "formula": null,
+      "content": "Tore die für be und Entladung genutzt werden",
+      "attributes": [],
+      "notes": [],
+      "related_to": [
+        {
+          "node": "Syntheseschritt",
+          "relation": "Parameter"
+        }
+      ],
+      "related_from": []
+    }
+  ]
+}

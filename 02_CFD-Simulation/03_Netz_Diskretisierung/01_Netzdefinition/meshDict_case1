@@ -1,0 +1,120 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | cfMesh: A library for mesh generation          | 
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           | Author: Franjo Juretic                          | 
+|    \\/     M anipulation  | E-mail: franjo.juretic@c-fields.com            |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version   2.0;
+    format    ascii;
+    class     dictionary;
+    location  "system";
+    object    meshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// ZONAL MESHING STRATEGY (wind-tunnel + thin-plate hall typology)
+// Three explicit scales: coarse tunnel bulk, volumetric hall box, thin plate bands.
+
+surfaceFile "constant/triSurface/geometry.fms";
+
+maxCellSize 4.1117;
+
+// minCellSize intentionally OMITTED: defining it enables cfMesh's "automatic
+// refinement" pass (curvature/corner/partitioning criteria). With perfectly
+// fitted plates the corner criteria never converges → infinite loop
+// ("N boxes marked by the corner criteria"). All refinement is specified
+// EXPLICITLY below via boundaryCellSize + objectRefinements + localRefinement.
+
+boundaryCellSize 2.0558;
+
+
+// Volumetric refinement: hall interior (auto-detected furniture bbox + 2.0 m margin)
+objectRefinements
+{
+    hallBox
+    {
+        type        box;
+        cellSize    0.7310;
+        centre      (7.500 30.000 7.110);
+        lengthX     19.000;
+        lengthY     64.000;
+        lengthZ     14.220;
+    }
+}
+
+
+localRefinement
+{
+    object_0F_block_1
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_3
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_4
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_6
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_7
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_8
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_9
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_10
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+    object_0F_block_11
+    {
+        cellSize 0.2;
+        refinementThickness 0.2;
+    }
+}
+
+
+// Minimal boundary layers (zonal strategy — avoids layer-cell explosion)
+boundaryLayers
+{
+    nLayers 2;
+    thicknessRatio 1.2;
+}
+
+
+renameBoundary
+{
+    defaultName walls;
+    defaultType wall;
+}
+
+meshQualitySettings
+{
+    maxNonOrthogonality 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    minCellVolume       1e-8;
+    minFaceArea         1e-13;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

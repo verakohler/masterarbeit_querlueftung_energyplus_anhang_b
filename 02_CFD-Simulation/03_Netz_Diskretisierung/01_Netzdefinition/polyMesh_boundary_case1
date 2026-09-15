@@ -1,0 +1,144 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2412                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+17
+(
+ceil_0F
+{
+    type wall;
+    nFaces 60518;
+    startFace 6996032;
+}
+
+floor_0F
+{
+    type wall;
+    nFaces 81143;
+    startFace 7056550;
+}
+
+object_0F_block_1
+{
+    type wall;
+    nFaces 112912;
+    startFace 7137693;
+}
+
+object_0F_block_10
+{
+    type wall;
+    nFaces 8862;
+    startFace 7250605;
+}
+
+object_0F_block_11
+{
+    type wall;
+    nFaces 3312;
+    startFace 7259467;
+}
+
+object_0F_block_3
+{
+    type wall;
+    nFaces 90329;
+    startFace 7262779;
+}
+
+object_0F_block_4
+{
+    type wall;
+    nFaces 90139;
+    startFace 7353108;
+}
+
+object_0F_block_6
+{
+    type wall;
+    nFaces 8909;
+    startFace 7443247;
+}
+
+object_0F_block_7
+{
+    type wall;
+    nFaces 8837;
+    startFace 7452156;
+}
+
+object_0F_block_8
+{
+    type wall;
+    nFaces 3334;
+    startFace 7460993;
+}
+
+object_0F_block_9
+{
+    type wall;
+    nFaces 8884;
+    startFace 7464327;
+}
+
+vent_0F_1
+{
+    type            patch;
+    nFaces 16494;
+    startFace 7473211;
+}
+
+vent_0F_2
+{
+    type            patch;
+    nFaces 16494;
+    startFace 7489705;
+}
+
+wall_0F_1
+{
+    type wall;
+    nFaces 8818;
+    startFace 7506199;
+}
+
+wall_0F_2
+{
+    type wall;
+    nFaces 0;
+    startFace 7515017;
+}
+
+wall_0F_3
+{
+    type wall;
+    nFaces 8818;
+    startFace 7515017;
+}
+
+wall_0F_4
+{
+    type wall;
+    nFaces 0;
+    startFace 7523835;
+}
+
+)
+
+
+// ************************************************************************* //

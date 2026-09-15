@@ -1,0 +1,124 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2412                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       dictionary;
+    location    "constant/polyMesh";
+    object      meshMetaDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+surfaceFile     "constant/triSurface/geometry.fms";
+
+surfaceMeta
+{
+    nPoints         90;
+    nFacets         136;
+    nPatches        17;
+    nFeatureEdges   127;
+    patches
+    {
+        wall_0F_1
+        {
+            type            empty;
+            nFacets         2;
+        }
+        wall_0F_2
+        {
+            type            empty;
+            nFacets         8;
+        }
+        vent_0F_2
+        {
+            type            empty;
+            nFacets         2;
+        }
+        wall_0F_3
+        {
+            type            empty;
+            nFacets         2;
+        }
+        wall_0F_4
+        {
+            type            empty;
+            nFacets         8;
+        }
+        vent_0F_1
+        {
+            type            empty;
+            nFacets         2;
+        }
+        floor_0F
+        {
+            type            empty;
+            nFacets         2;
+        }
+        ceil_0F
+        {
+            type            empty;
+            nFacets         2;
+        }
+        object_0F_block_1
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_3
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_4
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_6
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_7
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_8
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_9
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_10
+        {
+            type            empty;
+            nFacets         12;
+        }
+        object_0F_block_11
+        {
+            type            empty;
+            nFacets         12;
+        }
+    }
+    pointSubsets
+    {
+    }
+    facetSubsets
+    {
+    }
+    featureEdgeSubsets
+    {
+    }
+}

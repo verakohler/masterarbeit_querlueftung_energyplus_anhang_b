@@ -1,0 +1,60 @@
+## Numerical Model and Solver Setup
+
+The numerical simulations were performed using the open-source finite-volume computational fluid dynamics (CFD) library **OpenFOAM (ESI/OpenCFD distribution, version v2412)**. The indoor airflow was treated as an **incompressible, steady-state, buoyancy-driven turbulent flow**, and solved with the **`buoyantBoussinesqSimpleFoam`** application. This solver integrates the Reynolds-Averaged conservation equations of mass, momentum and thermal energy under the **Boussinesq approximation**, in which density variations are neglected everywhere except in the gravitational body-force term of the momentum equation. Thermally induced buoyancy is therefore represented through a linearised density–temperature relation, ρ = ρ_ref[1 − β(T − T_ref)], characterised by a thermal expansion coefficient β = 3.4113×10⁻³ K⁻¹ and a reference temperature T_ref = 293.15 K (20 °C), with a reference density ρ_ref = 1.2 kg m⁻³. The gravitational acceleration was prescribed as g = 9.81 m s⁻² acting along the negative vertical (z) axis. The working fluid, air, was modelled as a Newtonian fluid with a laminar kinematic viscosity ν = 1.5×10⁻⁵ m² s⁻¹, a molecular Prandtl number Pr = 0.7 and a turbulent Prandtl number Pr_t = 0.85, the latter governing the turbulent diffusion of heat via the Reynolds analogy.
+
+### Turbulence modelling
+
+Turbulence closure was achieved within the **Reynolds-Averaged Navier–Stokes (RANS)** framework. The effect of turbulent fluctuations was modelled through the **k–ω SST (Shear-Stress Transport)** two-equation eddy-viscosity model of Menter. This model was selected because it combines the accurate near-wall integration of the standard k–ω formulation—advantageous for the wall-bounded buoyant boundary layers characteristic of indoor environments—with the robustness and free-stream independence of the k–ε model in the bulk of the domain, the transition between both being governed by blending functions. The SST limiter on the eddy viscosity further prevents the overprediction of turbulent shear stresses in adverse pressure-gradient regions. The wall distance required by the blending functions was computed using the `meshWave` algorithm. Turbulent heat transport was represented through a gradient-diffusion hypothesis employing the turbulent Prandtl number stated above.
+
+### Spatial and temporal discretisation
+
+The governing equations were discretised following the standard second-order finite-volume methodology of OpenFOAM. As the analysis targets the steady solution, the temporal derivative was discretised with a **`steadyState`** scheme (i.e. the transient term is dropped and the equations are advanced pseudo-transiently towards convergence). Gradient terms were evaluated with a second-order central **Gauss linear** scheme. The convective terms of the momentum and energy equations employed a **bounded second-order `linearUpwind`** scheme, a formulation that offers a favourable compromise between the accuracy of central differencing and the boundedness of upwind differencing, thereby limiting non-physical oscillations while preserving second-order accuracy. To ensure numerical stability, the convective terms of the turbulence transport equations (k and ω) were discretised with a **bounded first-order `upwind`** scheme, an established practice that avoids spurious negative values of these strictly positive quantities. Laplacian (diffusion) terms were treated with a **`Gauss linear corrected`** scheme incorporating an explicit non-orthogonal correction, and the surface-normal gradients used the corresponding `corrected` scheme; face interpolation was linear (second-order central). The `bounded` qualifier applied to the convective operators introduces a numerically consistent correction that improves the convergence of steady-state incompressible computations.
+
+### Pressure–velocity coupling and linear solvers
+
+The pressure–velocity coupling was resolved with the **SIMPLE (Semi-Implicit Method for Pressure-Linked Equations)** algorithm in its consistent variant (**SIMPLEC**, `consistent yes`), which relaxes the requirement for strong pressure under-relaxation and accelerates convergence. Three non-orthogonal correctors were applied per outer iteration to compensate for mesh non-orthogonality. The discretised pressure equation (`p_rgh`, the dynamic pressure with the hydrostatic contribution removed) was solved with a **geometric-algebraic multigrid (GAMG)** solver using a DIC-preconditioned Gauss–Seidel smoother and `faceAreaPair` agglomeration, to an absolute tolerance of 1×10⁻⁶. The momentum, energy and turbulence equations (U, T, k, ω) were solved with a **preconditioned bi-conjugate gradient stabilised (PBiCGStab)** solver employing a DILU preconditioner, to an absolute tolerance of 1×10⁻⁷. Solution stability was enforced through explicit under-relaxation, with factors of 0.3 for pressure, 0.5 for velocity, 0.55 for temperature and 0.5 for the turbulence quantities. Convergence was declared once the scaled initial residuals of all transported variables fell below 1×10⁻⁴.
+
+### Boundary conditions
+
+The computational domain was bounded by solid walls and by a set of openings representing the supply and extraction terminals as well as natural-ventilation apertures. The boundary conditions were assigned per field as follows.
+
+**Solid walls.** A no-slip condition (`noSlip`) was imposed on the velocity field, and a `fixedFluxPressure` condition was applied to the dynamic pressure `p_rgh`, ensuring consistency between the pressure gradient and the gravitational/body-force flux at the wall. The thermal boundary condition admitted two formulations depending on the case definition: a Dirichlet condition of prescribed wall temperature (`fixedValue`), or a prescribed heat-flux condition implemented through a `codedMixed` boundary condition that enforces local energy conservation between the convective and radiative contributions (q_conv + q_rad = q_total), thereby avoiding double-counting of the radiative flux computed by the P1 model.
+
+**Inlets.** Two inlet formulations were used. Velocity inlets (`velocity_inlet`, `mass_flow_inlet`) imposed a `fixedValue` velocity vector—derived from the prescribed volumetric flow rate and the terminal area for mass-flow terminals—together with a `fixedValue` supply temperature and a `fixedFluxPressure` condition for `p_rgh`. Pressure inlets, representing natural-ventilation apertures, prescribed a `fixedValue` kinematic pressure (obtained as ΔP/ρ_ref) and a `pressureInletVelocity` condition that derives the inflow velocity from the local pressure gradient while strictly precluding backflow.
+
+**Outlets.** Pressure outlets prescribed a `fixedValue` kinematic pressure and an `inletOutlet` velocity condition that behaves as a zero-gradient outflow during normal operation and clamps any spurious backflow to zero, thereby preventing non-physical recirculation feedback. Velocity/mass-flow extraction outlets imposed the prescribed extraction velocity or volumetric flow rate (via `flowRateInletVelocity` with a negative flow rate) with a floating (zero-gradient or fixed-flux) pressure. At all outlets the temperature used an `inletOutlet` formulation, defaulting to zero-gradient during outflow and to the exterior temperature in the event of backflow.
+
+**Turbulence quantities.** At solid walls, standard wall functions were applied consistently with the k–ω SST model: `kqRWallFunction` for the turbulent kinetic energy, `omegaWallFunction` for the specific dissipation rate, and `nutUSpaldingWallFunction` for the turbulent viscosity. The Spalding formulation was chosen deliberately, as it reproduces the law of the wall continuously across the viscous sublayer, buffer and log-law regions, providing an accurate eddy viscosity irrespective of the local y⁺—an important robustness feature for the spatially varying near-wall resolution typical of complex indoor geometries. The turbulent thermal diffusivity α_t at walls was obtained through the `alphatJayatillekeWallFunction` (Pr_t = 0.85). At velocity inlets, the turbulent kinetic energy was prescribed via a `turbulentIntensityKineticEnergyInlet` condition (turbulence intensity of 5 %) and the specific dissipation rate through a `turbulentMixingLengthFrequencyInlet` condition (mixing length of 0.1 m); pressure openings employed `inletOutlet` conditions for both quantities.
+
+--- This does not apply for our study ---
+**Radiation and scalar fields.** For the incident radiation field G, a `MarshakRadiation` condition with per-patch emissivity (read from `boundaryRadiationProperties`) was imposed at walls, and a zero-gradient condition at openings. The passive CO₂ concentration was set to a `fixedValue` of zero (fresh air) at inlets and openings, and to zero-gradient at impermeable walls, whereas the local Mean Age of Air was fixed to zero at inflow boundaries (freshly supplied air) and treated with an `inletOutlet` condition at bidirectional openings.
+
+### Additional transport phenomena
+
+For the assessment of indoor air quality and thermal comfort, additional scalar fields were transported on the converged velocity field. A **passive CO₂ concentration** was solved as a `scalarTransport` function object using a molecular diffusivity of 1.6×10⁻⁵ m² s⁻¹ and clipped to the physical range [0, 1], while the **local Mean Age of Air (τ)** (Sandberg, 1981) was computed to characterise ventilation effectiveness. **Thermal radiation** exchange within the air volume was accounted for through the **P1 (first-order spherical-harmonics) radiation model**, solved every five outer iterations, treating the air as a weakly participating medium (absorption/emission coefficient of 0.01 m⁻¹) with negligible scattering.
+
+---
+
+## (Numerical setup)
+
+| Item | Setting |
+|---|---|
+| CFD code | OpenFOAM v2412 (ESI/OpenCFD) |
+| Solver | `buoyantBoussinesqSimpleFoam` (steady, incompressible, buoyant RANS) |
+| Buoyancy | Boussinesq: β = 3.4113×10⁻³ K⁻¹, T_ref = 293.15 K, ρ_ref = 1.2 kg m⁻³ |
+| Fluid | Newtonian air; ν = 1.5×10⁻⁵ m² s⁻¹; Pr = 0.7; Pr_t = 0.85 |
+| Turbulence | RANS, k–ω SST (Menter); wallDist `meshWave` |
+| p–v coupling | SIMPLEC (`consistent yes`), 3 non-orthogonal correctors |
+| Time term | `steadyState` |
+| Gradient | Gauss linear (2nd order) |
+| Convection (U, T) | bounded Gauss linearUpwind (2nd order) |
+| Convection (k, ω) | bounded Gauss upwind (1st order) |
+| Laplacian / snGrad | Gauss linear corrected / corrected |
+| p_rgh solver | GAMG + DICGaussSeidel, tol 1×10⁻⁶ |
+| U, T, k, ω solver | PBiCGStab + DILU, tol 1×10⁻⁷ |
+| Under-relaxation | p_rgh 0.3; U 0.5; T 0.55; k,ω 0.5 |
+| Convergence | residuals < 1×10⁻⁴ |
+| Wall functions | k: kqRWallFunction; ω: omegaWallFunction; ν_t: nutUSpaldingWallFunction; α_t: alphatJayatillekeWallFunction |
+| Inlet turbulence | I = 5 % (k); mixing length = 0.1 m (ω) |
+| Radiation | P1 model (every 5 iter), MarshakRadiation walls, ε per-patch |
+| Extra scalars | CO₂ (D = 1.6×10⁻⁵ m² s⁻¹), Mean Age of Air (τ) |
