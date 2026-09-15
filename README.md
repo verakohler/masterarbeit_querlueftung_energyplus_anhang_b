@@ -85,10 +85,6 @@ ASHRAE-Lizenz die Weitergabe an Dritte untersagt. Sie ist über die Wetterdatenb
 EnergyPlus frei beziehbar; die Quelle ist in der Arbeit angegeben. Die in den isothermen
 Rechnungen verwendeten Wetterdateien sind eigene Konstruktionen und liegen bei.
 
-**Stand der Schedules.** `alle_tore.idf` ist der Lauf vom 11.08.2026 mit den
-Öffnungsversätzen −2 / 0 / +45 / +50 Minuten relativ zur Andockung. Alle Ergebnisse der
-Jahressimulation beruhen auf diesem Stand.
-
 **Rohdaten.** Die CFD-Strömungsfelder und die EnergyPlus-Ausgaben in Minutenauflösung sind
 wegen ihres Umfangs nicht archiviert. Nachvollziehbar sind die daraus abgeleiteten
 Kenngrößen: `cp_gate_extraction.csv` für die CFD, die Stundenwert-CSV und die
